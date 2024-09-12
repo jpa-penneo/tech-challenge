@@ -48,7 +48,7 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     fun saveToken(tokenInput: TokenInput): Response {
-        // TokenInput contains the properties you need for the task #3.
+        // TokenInput contains the properties you need for the task.
         // Here you need to encode the token to save it using the repository
         return Response.status(Response.Status.CREATED).build()
     }
@@ -62,7 +62,7 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     fun saveToken(personInput: PersonInput): Response {
-        // PersonInput contains the properties you need for the task #3.
+        // PersonInput contains the properties you need for the task.
         // Here you need to call the external API to get the data to then
         // generate and save a token, the same way you did in task # 3
         return Response.status(Response.Status.CREATED).build()
