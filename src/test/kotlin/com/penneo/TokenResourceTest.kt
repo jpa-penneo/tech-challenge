@@ -39,7 +39,7 @@ class TokenResourceTest {
         given()
             .`when`().get(TOKEN_GET_PATH, 9999)
             .then().statusCode(404)
-            .body(`is`("Token not found with id: 9999"))
+            .body("errorMessage", `is`("Token not found with id: 9999"))
     }
 
     @Test
@@ -102,7 +102,7 @@ class TokenResourceTest {
             .body(request)
             .`when`().post(TOKEN_PERSON_ADD_PATH)
             .then().statusCode(404)
-            .body(`is`("Person not found with id: 10"))
+            .body("errorMessage", `is`("Person not found with id: 10"))
     }
 
     @Test

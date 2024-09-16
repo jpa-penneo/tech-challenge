@@ -1,6 +1,8 @@
 package com.penneo
 
 import com.penneo.entity.Token
+import com.penneo.exception.PersonNotFound
+import com.penneo.exception.TokenNotFound
 import com.penneo.input.PersonInput
 import com.penneo.input.TokenInput
 import com.penneo.jwt.JwtToken
