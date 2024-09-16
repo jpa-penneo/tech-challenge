@@ -6,22 +6,26 @@ import org.hamcrest.Matchers.contains
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.jupiter.api.Test
 
+private const val EMAIL_GET_PATH = "/tokens/emails"
+private const val TOKEN_GET_PATH = "/tokens/{id}"
+private const val TOKEN_ADD_PATH = "/tokens/"
+
 @QuarkusTest
 class TokenResourceTest {
 
     // TODO will break with more data
     @Test
-    fun whenEmailEndpointCalled_returnsAllEmails() {
+    fun getEmails_whenCalled_returnsAllEmails() {
         given()
-            .`when`().get("/tokens/emails")
+            .`when`().get(EMAIL_GET_PATH)
             .then().statusCode(200)
             .body("", contains("some@peneo.com"))
     }
 
     @Test
-    fun whenValidTokenId_returnsDecodedTokenInformation() {
+    fun getToken_whenValidTokenId_returnsDecodedTokenInformation() {
         given()
-            .`when`().get("/tokens/1")
+            .`when`().get(TOKEN_GET_PATH, 1)
             .then().statusCode(200)
             .body("email", `is`("some@peneo.com"))
             .body("name", `is`("Penneo Employee"))
@@ -30,9 +34,9 @@ class TokenResourceTest {
     }
 
     @Test
-    fun whenInvalidTokenId_returns404() {
+    fun getToken_whenInvalidTokenId_returns404NotFound() {
         given()
-            .`when`().get("/tokens/9999")
+            .`when`().get(TOKEN_GET_PATH, 9999)
             .then().statusCode(404)
             .body(`is`("Token not found with id: 9999"))
     }
