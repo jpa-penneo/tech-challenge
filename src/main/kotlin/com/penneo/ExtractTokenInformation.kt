@@ -15,6 +15,7 @@ class ExtractTokenInformation {
         fun from(token: Token): TokenInformationResponse {
             val decodedToken = JwtToken.decodeToken(token.token)
             val payload = payloadOf(decodedToken)
+            assertPayload(payload)
             return TokenInformationResponse(
                 token.email,
                 payload["name"] as String,
@@ -29,6 +30,17 @@ class ExtractTokenInformation {
             val type = object : TypeReference<Map<String, Any>>() {}
             return objectMapper.readValue(payloadJson, type)
         }
-    }
 
+        private fun assertPayload(payload: Map<String, Any>) {
+            if(payload["name"] == null) {
+                throw IllegalArgumentException("\"name\" is not present in token!")
+            }
+            if(payload["age"] == null) {
+                throw IllegalArgumentException("\"age\" is not present in token!")
+            }
+            if(payload["married"] == null) {
+                throw IllegalArgumentException("\"married\" is not present in token!")
+            }
+        }
+    }
 }
