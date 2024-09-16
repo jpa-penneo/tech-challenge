@@ -1,6 +1,5 @@
 package com.penneo
 
-import com.penneo.entity.Token
 import com.penneo.input.PersonInput
 import com.penneo.input.TokenInput
 import com.penneo.repository.TokenRepository
@@ -23,7 +22,7 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @GET
     @Path("/emails")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getEmails(): List<Token> = tokenRepository.listAll()
+    fun getEmails(): List<String> = tokenRepository.findAllEmails()
 
     /**
      * Task #2: Retrieves information of a token
