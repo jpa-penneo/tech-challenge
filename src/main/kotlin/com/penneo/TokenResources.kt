@@ -31,13 +31,8 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getTokenById(@PathParam("id") id: Long): TokenInformationResponse {
-        // Here you should get the token by id, decode it using JwtToken, to then return all the information: email, name, age, married
-        return TokenInformationResponse(
-            "some@email",
-            "Some name",
-            28,
-            false
-        )
+        val token = tokenRepository.findById(id) ?: throw TokenNotFound(id)
+        return ExtractTokenInformation.from(token)
     }
 
     /**
