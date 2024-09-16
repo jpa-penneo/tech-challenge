@@ -13,3 +13,12 @@ class TokenNotFoundMapper : ExceptionMapper<TokenNotFound> {
             .build()
     }
 }
+
+@Provider
+class PersonNotFoundMapper : ExceptionMapper<PersonNotFound> {
+    override fun toResponse(exception: PersonNotFound): Response {
+        return Response.status(Response.Status.NOT_FOUND)
+            .entity(exception.message)
+            .build()
+    }
+}

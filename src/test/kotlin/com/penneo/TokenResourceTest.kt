@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test
 private const val EMAIL_GET_PATH = "/tokens/emails"
 private const val TOKEN_GET_PATH = "/tokens/{id}"
 private const val TOKEN_ADD_PATH = "/tokens/"
+private const val TOKEN_PERSON_ADD_PATH = "/tokens/person"
 
+// TODO needs to have DB setup in test, database is created by quarkusDev but not quarkusTest
 @QuarkusTest
 class TokenResourceTest {
 
-    // TODO needs to have test only DB, data gets added by other tests
     @Test
     fun getEmails_whenCalled_returnsAllEmails() {
         given()
@@ -73,4 +74,48 @@ class TokenResourceTest {
             .then().statusCode(400)
     }
 
+    @Test
+    fun addTokenFromPerson_whenCalled_returns201Created() {
+        val request = """
+            {
+                "id": 2,
+                "email": "jhonny@example.com"
+            }
+        """.trimIndent()
+        given()
+            .contentType("application/json")
+            .body(request)
+            .`when`().post(TOKEN_PERSON_ADD_PATH)
+            .then().statusCode(201)
+    }
+
+    @Test
+    fun addTokenFromPerson_whenInvalidPersonId_returns400BadRequest() {
+        val request = """
+            {
+                "id": 10,
+                "email": "jhonny@example.com"
+            }
+        """.trimIndent()
+        given()
+            .contentType("application/json")
+            .body(request)
+            .`when`().post(TOKEN_PERSON_ADD_PATH)
+            .then().statusCode(404)
+            .body(`is`("Person not found with id: 10"))
+    }
+
+    @Test
+    fun addTokenFromPerson_whenMissingEmail_returns400BadRequest() {
+        val request = """
+            {
+                "id": 1,
+            }
+        """.trimIndent()
+        given()
+            .contentType("application/json")
+            .body(request)
+            .`when`().post(TOKEN_PERSON_ADD_PATH)
+            .then().statusCode(400)
+    }
 }

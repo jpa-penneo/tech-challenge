@@ -6,6 +6,7 @@ import com.penneo.input.TokenInput
 import com.penneo.jwt.JwtToken
 import com.penneo.repository.TokenRepository
 import com.penneo.response.TokenInformationResponse
+import com.penneo.rest.PersonApi
 import jakarta.transaction.Transactional
 import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.GET
@@ -17,7 +18,10 @@ import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
 
 @Path("/tokens")
-class TokenResources(private val tokenRepository: TokenRepository) {
+class TokenResources(
+    private val tokenRepository: TokenRepository,
+    private val personApi: PersonApi,
+) {
     /**
      * Task #1: Retrieves the list of email tokens
      */
@@ -62,9 +66,13 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     fun saveToken(personInput: PersonInput): Response {
-        // PersonInput contains the properties you need for the task.
-        // Here you need to call the external API to get the data to then
-        // generate and save a token, the same way you did in task # 3
+        val person = personApi.getUserById(personInput.id) ?: throw PersonNotFound(personInput.id)
+        val jwtToken = JwtToken.generateToken(person.name, person.age, person.married)
+        val token = Token(
+            email = personInput.email,
+            token = jwtToken
+        )
+        tokenRepository.persist(token)
         return Response.status(Response.Status.CREATED).build()
     }
 }
