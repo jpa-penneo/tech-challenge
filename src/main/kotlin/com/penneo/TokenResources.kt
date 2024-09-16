@@ -1,7 +1,9 @@
 package com.penneo
 
+import com.penneo.entity.Token
 import com.penneo.input.PersonInput
 import com.penneo.input.TokenInput
+import com.penneo.jwt.JwtToken
 import com.penneo.repository.TokenRepository
 import com.penneo.response.TokenInformationResponse
 import jakarta.transaction.Transactional
@@ -42,8 +44,12 @@ class TokenResources(private val tokenRepository: TokenRepository) {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     fun saveToken(tokenInput: TokenInput): Response {
-        // TokenInput contains the properties you need for the task.
-        // Here you need to encode the token to save it using the repository
+        val jwtToken = JwtToken.generateToken(tokenInput.name, tokenInput.age, tokenInput.married)
+        val token = Token(
+            email = tokenInput.email,
+            token = jwtToken
+        )
+        tokenRepository.persist(token)
         return Response.status(Response.Status.CREATED).build()
     }
 
