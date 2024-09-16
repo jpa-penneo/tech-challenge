@@ -26,7 +26,6 @@ class ExtractTokenInformation {
         private fun payloadOf(decodedToken: DecodedJWT?): Map<String, Any> {
             val payload = decodedToken?.payload ?: throw IllegalArgumentException("Payload not present in token!")
             val payloadJson = String(Base64.getDecoder().decode(payload))
-            // TODO check if there is more prettier way to do this
             val type = object : TypeReference<Map<String, Any>>() {}
             return objectMapper.readValue(payloadJson, type)
         }
